@@ -55,7 +55,7 @@ export const Body = () => {
                         {data.main ? <span className='weather__temperature' >Real Feel{Math.round(data.main.feels_like)}ºC / {Math.round((data.main.feels_like * 9/5) + 32)}F</span> : null}
                         <span className='weather__hamidity'>Humidity {data.main ? <span>{data.main.humidity}</span> : null}%</span>
                     </div>
-                    <img className='weather__today-img' src={`icons/${data.weather && data.weather[0] ? data.weather[0].icon : null}.png`}></img>
+                    <img className='weather__today-img' src={`icons/${data.weather && data.weather[0] ? data.weather[0].icon : "404"}.png`}></img>
                 </div>
                 <div className='weather__future'>
                     <div className='weather__future-item'>
