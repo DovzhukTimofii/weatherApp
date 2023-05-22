@@ -1,0 +1,15 @@
+@import './fonts.scss';
+@mixin description {
+    color: white;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30.7075px;
+}
+@mixin main {
+    color: white;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 43.1508px;
+}

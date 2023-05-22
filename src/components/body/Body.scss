@@ -1,0 +1,116 @@
+@import'../../scss/mixin.scss';
+@import '../../scss/fonts.scss';
+
+body {
+    background: linear-gradient(186deg, #c8e2ff, #6a7f89)
+}
+
+.weather {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__today {
+        height: 400px;
+        width: 100%;
+        background: #325661;
+        display: flex;
+        justify-content: space-around;
+        padding-top: 50px;
+        margin-top: 27px;
+        .weather__today-description {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            .weather__day {
+                @include main
+            }
+            .weather__temperature {
+                @include description
+            }
+            .weather__time {
+                @include description
+            }
+            .weather__feel {
+                @include description
+            }
+            .weather__hamidity {
+                @include description
+            }
+        }
+        .weather__today-img {
+            height: 230px;
+            margin-top: 20px;
+        }
+    }
+    .search-panel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+        width: 240px;
+        height: 46px;
+        border-radius: 23px;
+        input {
+            border: none;
+            outline: none;
+        }
+    }
+    
+    &__future {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        &-item {
+            border: 3px solid rgba(185, 255, 252, 0.3019607843);
+            height: 110px;
+            display: flex;
+            justify-content: space-around;
+            padding-top: 16px;
+            .weather__future-description {
+                display: flex;
+                flex-direction: column;
+                .weather__future-day {
+                    font-size: 23.4244px;
+                    text-align: start;
+                    @include description
+                }
+                .weather__future-temperature {
+                    font-size: 23.4244px;
+                    text-align: start;
+                    @include description
+                }
+            }
+            .weather__future-img {
+                width: 110px;
+            }
+        }
+    }
+}
+@media screen and (max-width: 663px) {
+    .weather__today {
+        flex-direction: column;
+        height: 565px;
+        align-items: center;
+        &-img {
+            width: 250px;
+        }
+        &-desciption {
+            align-items:center
+        }
+    }
+    .weather__future {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 457px) {
+    .weather__today {
+        width: 301px;
+    }
+    .weather__future {
+        grid-template-columns: 1fr;
+    }
+
+}
