@@ -1,5 +1,5 @@
 import './App.scss'
-import { Body } from '../body/body'
+import { Body } from '../body/Body'
 function App() {
   
   return (
