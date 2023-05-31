@@ -32,6 +32,10 @@ export const App = () => {
       setLocation('')
   }, []);
 
+  if (error) {
+    return <span>Caught a delayed error.</span>;
+  }
+
   const searchLocation = (event) => {
           if (event.key === 'Enter') {
               axios.get(urlToday).then((response) => {
@@ -72,12 +76,10 @@ export const App = () => {
       }
   }
   
-
   return (
     <Container>
       <div className='container'>
-        
-          
+
           <main className='weather'>
               <GetAPI
                 latitude={latitude}
