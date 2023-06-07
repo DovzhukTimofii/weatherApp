@@ -1,5 +1,5 @@
-@import'../../scss/mixin.scss';
-@import '../../scss/fonts.scss';
+@import '../scss/mixin';
+@import '../scss/fonts';
 
 
 #root {
@@ -21,39 +21,6 @@ body {
     flex-direction: column;
     align-items: center;
 
-    &__today {
-        height: 400px;
-        width: 100%;
-        background: #325661;
-        display: flex;
-        justify-content: space-around;
-        padding-top: 50px;
-        margin-top: 27px;
-        .weather__today-description {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            .weather__day {
-                @include main
-            }
-            .weather__temperature {
-                @include description
-            }
-            .weather__time {
-                @include description
-            }
-            .weather__feel {
-                @include description
-            }
-            .weather__hamidity {
-                @include description
-            }
-        }
-        .weather__today-img {
-            height: 230px;
-            margin-top: 20px;
-        }
-    }
     .search-panel {
         display: flex;
         justify-content: center;
