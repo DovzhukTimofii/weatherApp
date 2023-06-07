@@ -5,32 +5,41 @@ import { FirstDay, SecondDay, ThirdDay, FourthDay, FifthDay, SixthDay } from '..
 import { WeatherDay, WeatherTime } from '../currentData/CurrenData';
 import { Container } from '../container/Container';
 import { randomCity } from '../randomCity/randomCity';
-import { GetAPI } from '../getAPI/GetAPI';
+import {useGetPosition} from '../getAPI/useGetPosition'
 
+const URL_KAY = '7bbcd0641391e3867da7fe524a3ce421' 
 
 export const App = () => {
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
   const [error, setError] = useState(null);
   const [data, setData] = useState({});
   const [dataFuture, setDataFuture] = useState({});
   const [location, setLocation] = useState('');
-  const urlToday = `https://api.openweathermap.org/data/2.5/weather?q=${location || randomCity}&units=metric&appid=7bbcd0641391e3867da7fe524a3ce421`;
-  const urlFuture = `https://api.openweathermap.org/data/2.5/forecast?q=${location || randomCity}&units=metric&appid=7bbcd0641391e3867da7fe524a3ce421`;
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
+ 
+  const urlToday = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${URL_KAY}`;
+  const urlFuture = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${URL_KAY}`;
+  const urlTodayLocation = `https://api.openweathermap.org/data/2.5/weather?q=${location || randomCity}&units=metric&appid=${URL_KAY}`;
+  const urlFutureLocation = `https://api.openweathermap.org/data/2.5/forecast?q=${location || randomCity}&units=metric&appid=${URL_KAY}`;
+  
+  useGetPosition({setLatitude, setLongitude})
+  
   
   useEffect(() => {
-      axios.get(urlToday).then((response) => {
-          setData(response.data);
-      }).catch((error) => {
-        setError(error);
-      });
-      axios.get(urlFuture).then((response) => {
-          setDataFuture(response.data);
-      }).catch((error) => {
-        setError(error);
-      });
-      setLocation('')
-  }, []);
+    if (longitude && latitude ) {
+        axios.get(urlToday).then((response) => {
+            setData(response.data);
+        }).catch((error) => {
+          setError(error);
+        });
+        axios.get(urlFuture).then((response) => {
+            setDataFuture(response.data);
+        }).catch((error) => {
+          setError(error);
+        });
+        setLocation('')
+    } 
+  }, [longitude, latitude]);
 
   if (error) {
     return <span>Caught a delayed error.</span>;
@@ -38,13 +47,13 @@ export const App = () => {
 
   const searchLocation = (event) => {
           if (event.key === 'Enter') {
-              axios.get(urlToday).then((response) => {
+              axios.get(urlTodayLocation).then((response) => {
                   setData(response.data)
               })
               setLocation('')
           }
           if (event.key === 'Enter') {
-              axios.get(urlFuture).then((response) => {
+              axios.get( urlFutureLocation).then((response) => {
                   setDataFuture(response.data)
               })
               setLocation('')
@@ -75,86 +84,80 @@ export const App = () => {
           return null
       }
   }
+  console.log(longitude)
   
   return (
     <Container>
-      <div className='container'>
+        <div className='container'>
 
-          <main className='weather'>
-              <GetAPI
-                latitude={latitude}
-                longitude={longitude}
-                setLatitude={setLatitude}
-                setLongitude={setLongitude}/>
-                <h1>{latitude}</h1>
-                <h1>{longitude}</h1>
-              <h1>{data.name}</h1>
-              <div className='search-panel'>
-                  <input 
-                      type="text" 
-                      value={location}
-                      onKeyPress={searchLocation}
-                      onChange={event => setLocation(event.target.value)}
-                      placeholder='Enter Location'/>
-              </div>
+            <main className='weather'>
+                <h1>{data.name}</h1>
+                <div className='search-panel'>
+                    <input 
+                        type="text" 
+                        value={location}
+                        onKeyDown={searchLocation}
+                        onChange={event => setLocation(event.target.value)}
+                        placeholder='Enter Location'/>
+                </div>
               
 
-              <div className='weather__today'>
-                  <div className='weather__today-description'>
-                      <WeatherDay/>
-                      {WeatheTodayTemperature()}
-                      <WeatherTime/>
-                      {WeatheTodayFeelTemperature()}
-                      <span className='weather__hamidity'>Humidity {data.main ? <span>{data.main.humidity}</span> : null}%</span>
-                  </div>
-                  <img className='weather__today-img' src={`icons/${data.weather && data.weather[0] ? data.weather[0].icon : "404"}.png`}></img>
-              </div>
-              <div className='weather__future'>
-                  <div className='weather__future-item'>
-                      <div className='weather__future-description '>
-                          <FirstDay/>
-                          {WeatheFutureTemperature(0)}
-                      </div>
-                      <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[0] ? dataFuture.list[0].weather[0].icon : null}.png`} alt="" />
-                  </div>
-                  <div className='weather__future-item'>
-                      <div className='weather__future-description '>
-                          <SecondDay/>
-                          {WeatheFutureTemperature(1)}
-                      </div>
-                      <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[1] ? dataFuture.list[1].weather[0].icon : null}.png`} alt="" />
-                  </div>
-                  <div className='weather__future-item'>
-                      <div className='weather__future-description '>
-                          <ThirdDay/>
-                          {WeatheFutureTemperature(2)}
-                      </div>
-                      <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[2] ? dataFuture.list[2].weather[0].icon : null}.png`} alt="" />
-                  </div>
-                  <div className='weather__future-item'>
-                      <div className='weather__future-description '>
-                          <FourthDay/>
-                          {WeatheFutureTemperature(3)}
-                      </div>
-                      <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[3] ? dataFuture.list[3].weather[0].icon : null}.png`} alt="" />
-                  </div>
-                  <div className='weather__future-item'>
-                      <div className='weather__future-description '>
-                          <FifthDay/>
-                          {WeatheFutureTemperature(4)}
-                      </div>
-                      <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[4] ? dataFuture.list[4].weather[0].icon : null}.png`} alt="" />
-                  </div>
-                  <div className='weather__future-item'>
-                      <div className='weather__future-description '>
-                          <SixthDay/>
-                          {WeatheFutureTemperature(5)}
-                      </div>
-                      <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[5] ? dataFuture.list[5].weather[0].icon : null}.png`} alt="" />
-                  </div>
-              </div>
-          </main>
-      </div>
+                <div className='weather__today'>
+                    <div className='weather__today-description'>
+                        <WeatherDay/>
+                        {WeatheTodayTemperature()}
+                        <WeatherTime/>
+                        {WeatheTodayFeelTemperature()}
+                        <span className='weather__hamidity'>Humidity {data.main ? <span>{data.main.humidity}</span> : null}%</span>
+                    </div>
+                    <img className='weather__today-img' src={`icons/${data.weather && data.weather[0] ? data.weather[0].icon : "404"}.png`}></img>
+                </div>
+                <div className='weather__future'>
+                    <div className='weather__future-item'>
+                        <div className='weather__future-description '>
+                            <FirstDay/>
+                            {WeatheFutureTemperature(0)}
+                        </div>
+                        <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[0] ? dataFuture.list[0].weather[0].icon : null}.png`} alt="" />
+                    </div>
+                    <div className='weather__future-item'>
+                        <div className='weather__future-description '>
+                            <SecondDay/>
+                            {WeatheFutureTemperature(1)}
+                        </div>
+                        <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[1] ? dataFuture.list[1].weather[0].icon : null}.png`} alt="" />
+                    </div>
+                    <div className='weather__future-item'>
+                        <div className='weather__future-description '>
+                            <ThirdDay/>
+                            {WeatheFutureTemperature(2)}
+                        </div>
+                        <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[2] ? dataFuture.list[2].weather[0].icon : null}.png`} alt="" />
+                    </div>
+                    <div className='weather__future-item'>
+                        <div className='weather__future-description '>
+                            <FourthDay/>
+                            {WeatheFutureTemperature(3)}
+                        </div>
+                        <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[3] ? dataFuture.list[3].weather[0].icon : null}.png`} alt="" />
+                    </div>
+                    <div className='weather__future-item'>
+                        <div className='weather__future-description '>
+                            <FifthDay/>
+                            {WeatheFutureTemperature(4)}
+                        </div>
+                        <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[4] ? dataFuture.list[4].weather[0].icon : null}.png`} alt="" />
+                    </div>
+                    <div className='weather__future-item'>
+                        <div className='weather__future-description '>
+                            <SixthDay/>
+                            {WeatheFutureTemperature(5)}
+                        </div>
+                        <img className='weather__future-img' src={`icons/${dataFuture.list && dataFuture.list[5] ? dataFuture.list[5].weather[0].icon : null}.png`} alt="" />
+                    </div>
+                </div>
+            </main>
+        </div>
     </Container>
       
   )
