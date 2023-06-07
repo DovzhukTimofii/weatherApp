@@ -1,9 +1,7 @@
 import './App.scss';
-import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {FifthDay, FirstDay, FourthDay, SecondDay, SixthDay, ThirdDay} from '../components/daysOfWeek/daysOfWeek.jsx'
 import {Container} from '../components/Container/Container.jsx';
-import {randomCity} from '../components/randomCity/randomCity.jsx';
 import {useInitialLocation} from '../shared/hooks/useInitialLocation';
 import {fetchWeather} from "../shared/api/fetchWeather.js";
 import {WeatherToday} from "../components/WeatherToday";
@@ -14,7 +12,7 @@ export const App = () => {
     const [dataFuture, setDataFuture] = useState({});
     const [location, setLocation] = useState('');
     const [weatherToday, setWeatherToday] = useState(null);
-    const {position, error: errorLocation} = useInitialLocation(setError);
+    const {position} = useInitialLocation(setError);
     const {getWeatherTodayByCords, getWeatherTodayByCity, getWeatherForecast, getWeatherForecastByCords} = fetchWeather();
 
     useEffect(() => {
@@ -67,7 +65,7 @@ export const App = () => {
                         <input
                             type="text"
                             value={location}
-                            onKeyPress={searchLocation}
+                            onKeyDown={searchLocation}
                             onChange={event => setLocation(event.target.value)}
                             placeholder='Enter Location'/>
                     </div>
