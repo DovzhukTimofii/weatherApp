@@ -17,8 +17,8 @@ export const App = () => {
   const [dataFuture, setDataFuture] = useState({});
   const [location, setLocation] = useState('');
  
-  const urlToday = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${URL_KAY}`;
-  const urlFuture = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${URL_KAY}`;
+  const urlToday = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${URL_KAY}`;
+  const urlFuture = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&appid=${URL_KAY}`;
   const urlTodayLocation = `https://api.openweathermap.org/data/2.5/weather?q=${location || randomCity}&units=metric&appid=${URL_KAY}`;
   const urlFutureLocation = `https://api.openweathermap.org/data/2.5/forecast?q=${location || randomCity}&units=metric&appid=${URL_KAY}`;
   
